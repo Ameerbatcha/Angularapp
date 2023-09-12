@@ -29,11 +29,11 @@ pipeline {
                     sshTransfer(
                         cleanRemote: false,
                         excludes: '',
-                       /* execCommand: """cd /opt/docker; 
+                        execCommand: """cd /opt/docker; 
                                         tar -xf Node.tar.gz; 
-                                        docker build . -t angular-app:latest
-                                        docker run -d --name angularapp -p 80:80 angular-app:latest
-                                        """, */
+                                        rm -rf Node.tar.gz;
+                                       
+                                        """, 
                         execTimeout: 200000,
                         flatten: false,
                         makeEmptyDirs: false,

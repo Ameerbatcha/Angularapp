@@ -12,6 +12,13 @@ pipeline {
     }
 
     
+ stage('Build') {
+            steps {
+                sh 'tar czf Node.tar.gz *'
+            }
+        }
+
+    
       stage('Docker Build'){
     steps{
       
@@ -35,7 +42,7 @@ pipeline {
                         remoteDirectory: '//opt//docker//',
                         remoteDirectorySDF: false,
                         removePrefix: '',
-                        sourceFiles: '/angular-pipeline/*'
+                        sourceFiles: '**/*.gz'
                     )
                 ],
                 usePromotionTimestamp: false,

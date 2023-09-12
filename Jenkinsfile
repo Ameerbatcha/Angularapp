@@ -34,8 +34,8 @@ pipeline {
                         patternSeparator: '[, ]+$',
                         remoteDirectory: '//opt//docker//',
                         remoteDirectorySDF: false,
-                        removePrefix: '/var/lib/jenkins/workspace/',
-                        sourceFiles: '/var/lib/jenkins/workspace/angular-pipeline/*'
+                        removePrefix: '',
+                        sourceFiles: '/angular-pipeline/*'
                     )
                 ],
                 usePromotionTimestamp: false,

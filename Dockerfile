@@ -4,6 +4,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
+RUN ng build 
 RUN npm run build
 
 # Stage 2: Publish the artifacts in an Nginx server

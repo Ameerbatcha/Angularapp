@@ -6,6 +6,7 @@ pipeline {
     
     stage('Checkout') {
       steps {
+        deleteDir()
         git 'https://github.com/Ameerbatcha/Angularapp.git'
       }
     }

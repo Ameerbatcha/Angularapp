@@ -14,7 +14,7 @@ pipeline {
     
       stage('Docker Build'){
     steps{
-        sh "echo ${DOCKER_TAG}"
+      
         sshPublisher(publishers: [
             sshPublisherDesc(
                 configName: 'docker',

@@ -9,6 +9,7 @@ export class AppComponent {
 
   isMenuScrolled = false;
   isSidebarShowing = false;
+  title = 'AngularCrashCourse';
 
   @HostListener('window:scroll', ['$event'])
   scrollCheck() {

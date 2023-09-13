@@ -37,9 +37,12 @@ pipeline {
                         execCommand: """cd /opt/docker; 
                                         tar -xf Node.tar.gz; 
                                         rm -rf Node.tar.gz;
-                                        docker build . -t ameerbatcha/angularapp:${DOCKER_TAG}
+                                        
+                                    /*    docker build . -t ameerbatcha/angularapp:${DOCKER_TAG}
                                         docker login -u ameerbatcha -p ${DOCKER_CRED}
                                         docker push ameerbatcha/angularapp:${DOCKER_TAG}
+                                        
+                                    */
                                         """, 
                         execTimeout: 2000000,
                         flatten: false,

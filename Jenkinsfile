@@ -41,7 +41,7 @@ pipeline {
                                         docker login -u ameerbatcha -p ${DOCKER_CRED}
                                         docker push ameerbatcha/angularapp:${DOCKER_TAG}
                                         """, 
-                        execTimeout: 2000000,
+                        execTimeout: 200000,
                         flatten: false,
                         makeEmptyDirs: false,
                         noDefaultExcludes: false,

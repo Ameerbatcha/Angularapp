@@ -14,18 +14,12 @@ module.exports = function (config) {
     ],
     client: {
       jasmine: {
-        // you can add configuration options for Jasmine here
-        // the possible options are listed at https://jasmine.github.io/api/edge/Configuration.html
-        // for example, you can disable the random execution with `random: false`
-        // or set a specific seed with `seed: 4321`
+        // configuration options for Jasmine
       },
       clearContext: false // leave Jasmine Spec Runner output visible in browser
     },
-    jasmineHtmlReporter: {
-      suppressAll: true // removes the duplicated traces
-    },
     coverageReporter: {
-      dir: require('path').join(__dirname, './coverage/angular-crash-course'),
+      dir: require('path').join(__dirname, './coverage'),
       subdir: '.',
       reporters: [
         { type: 'html' },
@@ -41,7 +35,11 @@ module.exports = function (config) {
     customLaunchers: {
       CustomChrome: {
         base: 'Chrome',
-        flags: ['--no-sandbox']
+        flags: ['--no-sandbox'],
+        chromeOptions: {
+          binary: '/usr/bin/chromium-browser',
+          args: ['--headless', '--disable-gpu']
+        }
       }
     },
     singleRun: false,

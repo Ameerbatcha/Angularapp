@@ -4,7 +4,7 @@ pipeline {
 
    environment {
       DOCKER_TAG = getVersion()
-      DOCKER_CRED= credentials('dockerhub')
+      DOCKER_CRED = credentials('dockerhub')
     }
   
   stages {

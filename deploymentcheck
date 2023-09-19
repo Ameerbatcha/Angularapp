@@ -16,7 +16,7 @@ pipeline {
                     def ansiblePlaybookContent = '''
                     - hosts: dockeradmin
                       become : True
-                      become : true
+                   
                
 
                       tasks:

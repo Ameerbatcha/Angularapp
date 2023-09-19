@@ -15,7 +15,7 @@ pipeline {
                 script {
                     def ansiblePlaybookContent = '''
                     - hosts: dockeradmin
-                      remote_user: ec2-user
+                      become: true
 
                       tasks:
                         - name: Install python pip
@@ -40,7 +40,7 @@ pipeline {
                     writeFile(file: 'inline_playbook.yml', text: ansiblePlaybookContent)
 
                    def ansibleInventoryContent = '''[dockeradmin]
-                     172.31.39.173 ansible_user=ec2-user
+                     172.31.39.173 ansible_user=root
                     '''
 
                     writeFile(file: 'dev.inv', text: ansibleInventoryContent)

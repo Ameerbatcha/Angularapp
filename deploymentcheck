@@ -15,8 +15,8 @@ pipeline {
                 script {
                     def ansiblePlaybookContent = '''
                     - hosts: dockeradmin
-                      become: true
-                      remote_user: root
+                      become : true
+                      remote_user: ec2-user
 
                       tasks:
                         - name: Install python pip

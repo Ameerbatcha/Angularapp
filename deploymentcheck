@@ -15,6 +15,7 @@ pipeline {
                 script {
                     def ansiblePlaybookContent = '''
                     - hosts: dockeradmin
+                      become: true
                       remote_user: root
 
                       tasks:

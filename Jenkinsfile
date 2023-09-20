@@ -92,7 +92,7 @@ pipeline {
                     writeFile(file: 'inline_playbook.yml', text: ansiblePlaybookContent)
 
                    def ansibleInventoryContent = '''[dockeradmin]
-                   172.31.14.59 ansible_user=dockeradmin
+                   172.31.14.59 ansible_user=${SSH_USERNAME}
                     '''
 
                     writeFile(file: 'dev.inv', text: ansibleInventoryContent)

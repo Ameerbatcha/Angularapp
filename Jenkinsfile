@@ -102,7 +102,7 @@ pipeline {
                         extras: "-e DOCKER_TAG=${DOCKER_TAG} -vvv",
                         credentialsId: 'dev-dockerhost',
                         installation: 'ansible'
-                        -vvvv
+                   
                     )
                 
               }

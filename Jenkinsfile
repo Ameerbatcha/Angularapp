@@ -88,7 +88,7 @@ pipeline {
                             image: "ameerbatcha/nodeapp:{{ DOCKER_TAG }}"
                             state: started
                             published_ports:
-                              - 0.0.0.0:8082:80
+                              - 0.0.0.0:8081:80
                     '''
 
                     writeFile(file: 'inline_playbook.yml', text: ansiblePlaybookContent)

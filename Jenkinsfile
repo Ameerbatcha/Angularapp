@@ -60,53 +60,7 @@ pipeline {
     }
 }
 
-    stage('Docker Deploy') {
-            steps {
-                script {
-                    def ansiblePlaybookContent = '''
-                    - hosts: dockeradmin
-                      become: True
-
-                      tasks:
-                        - name: Install python pip
-                          yum:
-                            name: python-pip
-                            state: present
-
-                        - name: Install docker-py python module
-                          pip:
-                            name: docker-py
-                            state: present
-
-                        - name: Start the container
-                          docker_container:
-                            name: angularcontainer
-                            image: "ameerbatcha/angularapp:{{ DOCKER_TAG }}"
-                            state: started
-                            published_ports:
-                              - 0.0.0.0:8081:80
-                    '''
-
-                    writeFile(file: 'inline_playbook.yml', text: ansiblePlaybookContent)
-
-                   def ansibleInventoryContent = '''[dockeradmin]
-                     172.31.39.173 ansible_user=ec2-user
-                    '''
-
-                    writeFile(file: 'dev.inv', text: ansibleInventoryContent)
-
-   
-                    ansiblePlaybook(
-                        inventory: 'dev.inv',
-                        playbook: 'inline_playbook.yml',
-                        extras: "-e DOCKER_TAG=${DOCKER_TAG}",
-                        credentialsId: 'dev-dockerhost',
-                        installation: 'ansible'
-                    )
-                
-              }
-            }
-        }
+ 
 
     }
 

@@ -100,14 +100,17 @@ pipeline {
                     writeFile(file: 'dev.inv', text: ansibleInventoryContent)
 
    
-                    ansiblePlaybook(
-                        inventory: 'dev.inv',
-                        playbook: 'inline_playbook.yml',
-                        extras: "-e DOCKER_TAG=${DOCKER_TAG} -vvv",
-                        credentialsId: 'dev-dockerhost',
-                        installation: 'ansible'
-                   
-                    )
+                 
+
+                  ansiblePlaybook(
+                                 inventory: 'dev.inv',
+                                 playbook: 'inline_playbook.yml',
+                                 credentialsId: 'dev-dockerhost',
+                                 installation: 'ansible',
+                                 extras: "-e DOCKER_TAG=${DOCKER_TAG} -vvv -e ansible_ssh_extra_args='-o StrictHostKeyChecking=no'",
+                                 disableHostKeyChecking: true
+)
+
                 
               }
             }

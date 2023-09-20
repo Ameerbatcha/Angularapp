@@ -105,8 +105,8 @@ pipeline {
                                  playbook: 'inline_playbook.yml',
                                  credentialsId: 'dev-dockerhost',
                                  installation: 'ansible',
-                                 extras: "-e DOCKER_TAG=${DOCKER_TAG} -vvv -e ansible_ssh_extra_args='-o StrictHostKeyChecking=no'",
-                                 disableHostKeyChecking: true
+                                 extras: "-e DOCKER_TAG=${DOCKER_TAG} -vvv ",
+                              
 )
 
                 

@@ -29,7 +29,7 @@ pipeline {
                         - name: Start the container
                           docker_container:
                             name: nodecontainer
-                            image: "ameerbatcha/nodeapp:{{ DOCKER_TAG }}"
+                            image: "ameerbatcha/nodeapp:0213425"
                             state: started
                             published_ports:
                               - 0.0.0.0:8081:80
@@ -51,7 +51,7 @@ pipeline {
                                  playbook: 'inline_playbook.yml',
                                  credentialsId: 'dev-dockerhost',
                                  installation: 'ansible',
-                                 extras: "-e DOCKER_TAG=${DOCKER_TAG} -vvv ",
+                               
                               
 )
 

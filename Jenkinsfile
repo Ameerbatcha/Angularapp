@@ -66,9 +66,7 @@ pipeline {
                     def ansiblePlaybookContent = '''
                     - hosts: dockeradmin
                       become: True
-                      gather_facts: yes
-                      vars: 
-                        ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
+                    
 
 
                       tasks:

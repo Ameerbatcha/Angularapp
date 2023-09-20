@@ -83,7 +83,7 @@ pipeline {
                         - name: Start the container
                           docker_container:
                             name: nodecontainer
-                            image: "ameerbatcha/nodeapp:{{ DOCKER_TAG }}"
+                            image: "ameerbatcha/nodeapp:0213425"
                             state: started
                             published_ports:
                               - 0.0.0.0:8081:80
@@ -92,7 +92,7 @@ pipeline {
                     writeFile(file: 'inline_playbook.yml', text: ansiblePlaybookContent)
 
                    def ansibleInventoryContent = '''[dockeradmin]
-                   172.31.14.59 ansible_user=${SSH_USERNAME}
+                     172.31.3.63 ansible_user=dockeradmin
                     '''
 
                     writeFile(file: 'dev.inv', text: ansibleInventoryContent)
@@ -105,7 +105,7 @@ pipeline {
                                  playbook: 'inline_playbook.yml',
                                  credentialsId: 'dev-dockerhost',
                                  installation: 'ansible',
-                                 extras: "-e DOCKER_TAG=${DOCKER_TAG} -vvv ",
+                               
                               
 )
 
@@ -117,30 +117,6 @@ pipeline {
     }
 
       
-
-
-  post {
-    always {
-
-
-
-        emailext(
-           body: """
-               Build ${env.BUILD_NUMBER} of ${env.JOB_NAME} has completed.
-                SCM revision: ${env.GIT_COMMIT}
-                Docker tag: ${env.DOCKER_TAG}
-            """,
-            subject: "Build ${env.JOB_NAME} ${env.BUILD_NUMBER} completed",
-            to: "ameerbatcha.learnings@gmail.com",
-            recipientProviders: [developers()],
-            mimeType: 'text/html',
-          
-            
-        )  
-
-
-    }
-}
   
 }
 

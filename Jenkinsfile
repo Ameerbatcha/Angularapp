@@ -99,9 +99,10 @@ pipeline {
                     ansiblePlaybook(
                         inventory: 'dev.inv',
                         playbook: 'inline_playbook.yml',
-                        extras: "-e DOCKER_TAG=${DOCKER_TAG}",
+                        extras: "-e DOCKER_TAG=${DOCKER_TAG} -vvv",
                         credentialsId: 'dev-dockerhost',
                         installation: 'ansible'
+                        -vvvv
                     )
                 
               }

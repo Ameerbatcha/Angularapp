@@ -12,7 +12,8 @@ pipeline {
 
     stage('Docker Deploy') {
             steps {
-                script {
+ git 'https://github.com/Ameerbatcha/Angularapp.git'
+               script {
                     def ansiblePlaybookContent = '''
                     - hosts: dockeradmin
                       become : True

@@ -146,7 +146,7 @@ node{
 
         See attached diff of <b> ${env.JOB_NAME} #${env.BUILD_NUMBER}. </b> <br><br>
         
-        Docker tag/Git commit ID short:<b> ${env.DOCKER_TAG} </b> <br><br>
+        Docker tag/Git commit ID short:<b> ${env.DOCKER_TAGG} </b> <br><br>
 
         Git Commit Id full: <b> ${env.GIT_COMMIT} </b><br><br>
 

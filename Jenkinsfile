@@ -148,7 +148,7 @@ node{
         
         Docker tag/Git commit ID short:<b> ${env.DOCKER_TAG} </b> <br><br>
 
-        Git Commit Id full: ${env.GIT_COMMIT} <br><br>
+        Git Commit Id full: <b> ${env.GIT_COMMIT} </b><br><br>
 
         Source Path: <b> ${env.WORKSPACE} </b><br><br>
 

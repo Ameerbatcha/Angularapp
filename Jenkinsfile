@@ -180,13 +180,13 @@ def getVersion(){
 }
 
 def getAuthor(){
-     def trigger = currentBuild.rawBuild.getCulprits().collect { it.fullName }.join(', ')
+     def trigger = sh(script: 'git log -1 --pretty=format:%an', returnStdout: true).trim()
      return trigger
 }
 
 def lastThreeCommits(){
-      def lastThreeCommits = sh(script: 'git log -n 3 --pretty=format:"%H"', returnStdout: true).trim().split('\n')
-      return lastThreeCommits
+      def commits  = sh(script: 'git log -n 3 --pretty=format:"%H"', returnStdout: true).trim().split('\n')
+      return commits
 }
 
     

@@ -118,6 +118,30 @@ pipeline {
 
     }
 
+  post {
+    always {
+
+
+
+        emailext(
+           body: """
+               Build ${env.BUILD_NUMBER} of ${env.JOB_NAME} has completed.
+                SCM revision: ${env.GIT_COMMIT}
+                Docker tag: ${env.DOCKER_TAG}
+            """,
+            subject: "Build ${env.JOB_NAME} ${env.BUILD_NUMBER} completed",
+            to: "ameerbatcha.learnings@gmail.com",
+            recipientProviders: [developers()],
+            mimeType: 'text/html',
+          
+            
+        )  
+
+
+    }
+}
+
+
       
   
 }

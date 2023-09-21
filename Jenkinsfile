@@ -14,7 +14,7 @@ pipeline {
     stage('Checkout') {
       steps {
         deleteDir()
-        gitops 'https://github.com/Ameerbatcha/Angularapp.git'
+        git 'https://github.com/Ameerbatcha/Angularapp.git'
       }
     }
 

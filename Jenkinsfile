@@ -7,12 +7,7 @@ pipeline {
       DOCKER_CRED = credentials('dockerhub')
   
     }
-  
-  stages {
-    
-    
 
-    }
 
 
 

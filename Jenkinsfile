@@ -122,6 +122,7 @@ pipeline {
 post {
   
   always {
+    script{
       def lastThreeCommits = lastThreeCommits()
      
     
@@ -164,6 +165,7 @@ post {
      
       mimeType: 'text/plain'
     )
+  }
   }
 }
 

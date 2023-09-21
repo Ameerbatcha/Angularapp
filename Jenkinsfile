@@ -131,40 +131,42 @@ post {
       script {
 node{
 
-             
+           
 
     emailext (
       subject: "Jenkins Notification: Production file deployment for ${env.JOB_NAME} - ${currentBuild.result}, Build ID: #${env.BUILD_NUMBER}",
       
       body: """
        
-        Hi DevOps Team,
+        Hi DevOps Team, <br><br><br>
 
-        Production File Deployment Process for ${env.JOB_NAME} ${env.BUILD_NUMBER} is ${currentBuild.result}. Kindly check the logs below for more details.
+        Production File Deployment Process for  <b> ${env.JOB_NAME} ${env.BUILD_NUMBER} is ${currentBuild.result}. </b> Kindly check the logs below for more details.<br><br>
 
-        Please find the last commit details below:
+        Please find the last commit details below:<br><br>
 
-        See attached diff of ${env.JOB_NAME} #${env.BUILD_NUMBER}.
+        See attached diff of <b> ${env.JOB_NAME} #${env.BUILD_NUMBER}. </b> <br><br>
+        
+        Docker tag/Git commit ID short:<b> ${env.DOCKER_TAG} </b> <br><br>
 
-        Commit Id: ${env.GIT_COMMIT}
+        Git Commit Id full: ${env.GIT_COMMIT} <br><br>
 
-        Source Path: ${env.WORKSPACE}
+        Source Path: <b> ${env.WORKSPACE} </b><br><br>
 
-        Author: ${env.GIT_AUTHOR_EMAIL}
+        Author: ${env.GIT_AUTHOR_EMAIL} <br><br>
 
-        Commit Dates: ${env.GIT_COMMIT_TIMESTAMP}
+        Commit Dates: ${env.GIT_COMMIT_TIMESTAMP} <br><br>
 
-        Production Deployment - ${currentBuild.result}
+        Production Deployment - <b>${currentBuild.result} </b> <br><br>
 
 
-        With Regards,
+        With Regards, <br><br><br>
 
         Jenkins Admin
         """,
       
       to: "ameerbatcha.learnings@gmail.com",
      
-      mimeType: 'text/plain'
+      mimeType: 'text/html'
     )
     }
    }

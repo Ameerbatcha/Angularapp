@@ -131,7 +131,7 @@ post {
       script {
 node{
 
-      
+      try {
 
     emailext (
       subject: "Jenkins Notification: Production file deployment for ${env.JOB_NAME} - ${currentBuild.result}, Build ID: #${env.BUILD_NUMBER}",
@@ -164,6 +164,16 @@ node{
      
       mimeType: 'text/html'
     )
+      }
+  catch (Exception e) {
+                    emailext (
+                        subject: "Jenkins Notification: Pipeline Failure",
+                        body: "The pipeline failed to execute due to a syntax error.",
+                        to: "ameerbatcha.learnings@gmail.com"
+                    )
+                    throw e
+                }
+
     }
    }  
  }

@@ -63,6 +63,7 @@ pipeline {
 
       stage('Docker Deploy') {
             steps {
+              script {
               
                     def ansiblePlaybookContent = '''
                     - hosts: dockeradmin
@@ -114,6 +115,7 @@ pipeline {
 
                 
               
+            }
             }
         }
 

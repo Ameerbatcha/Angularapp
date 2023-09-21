@@ -156,8 +156,6 @@ node{
 
         Production Deployment - ${currentBuild.result}
 
-        Changes in Commit:\n
-        ${sh(script: "git diff HEAD^ HEAD", returnStdout: true)}
 
         With Regards,
 

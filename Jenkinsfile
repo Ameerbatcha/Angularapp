@@ -63,7 +63,7 @@ pipeline {
 
       stage('Docker Deploy') {
             steps {
-                node {
+              
                     def ansiblePlaybookContent = '''
                     - hosts: dockeradmin
                       become: True
@@ -113,7 +113,7 @@ pipeline {
 )
 
                 
-              }
+              
             }
         }
 
@@ -123,8 +123,7 @@ post {
   
   always {
       
-     
-    
+
     emailext (
       subject: "Jenkins Notification: Production file deployment for ${env.JOB_NAME} - ${currentBuild.result}, Build ID: #${env.BUILD_NUMBER}",
       

@@ -122,9 +122,7 @@ pipeline {
 post {
   
   always {
-    script{
-node{
-      def lastThreeCommits = lastThreeCommits()
+      
      
     
     emailext (
@@ -142,9 +140,7 @@ node{
 
         Commit Id: ${env.GIT_COMMIT}
 
-        Three Last commits: ${lastThreeCommits[0]}
-                            ${lastThreeCommits[1]}
-                            ${lastThreeCommits[2]}
+      
 
         Source Path: ${env.WORKSPACE}
 
@@ -166,8 +162,7 @@ node{
      
       mimeType: 'text/plain'
     )
-}
-  }
+
   }
 }
 
@@ -188,10 +183,6 @@ def getAuthor(){
      return trigger
 }
 
-def lastThreeCommits(){
-      def commits  = sh(script: 'git log -n 3 --pretty=format:"%H"', returnStdout: true).trim().split('\n')
-      return commits
-}
 
     
    

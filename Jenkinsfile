@@ -152,10 +152,6 @@ node{
 
         Source Path: <b> ${env.WORKSPACE} </b><br><br>
 
-        Author: ${env.GIT_AUTHOR_EMAIL} <br><br>
-
-        Commit Dates: ${env.GIT_COMMIT_TIMESTAMP} <br><br>
-
         Production Deployment - <b>${currentBuild.result} </b> <br><br>
 
 

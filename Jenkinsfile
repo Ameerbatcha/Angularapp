@@ -131,10 +131,9 @@ post {
       script {
 node{
 
-          try {
-          }
+       
 
-  catch (Exception e) {
+  finally {
 
     emailext (
       subject: "Jenkins Notification: Production file deployment for ${env.JOB_NAME} - ${currentBuild.result}, Build ID: #${env.BUILD_NUMBER}",

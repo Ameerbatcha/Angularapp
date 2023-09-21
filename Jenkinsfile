@@ -123,6 +123,7 @@ post {
   
   always {
     script{
+node{
       def lastThreeCommits = lastThreeCommits()
      
     
@@ -165,6 +166,7 @@ post {
      
       mimeType: 'text/plain'
     )
+}
   }
   }
 }

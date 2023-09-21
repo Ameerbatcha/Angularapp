@@ -85,7 +85,7 @@ pipeline {
                         - name: Start the container
                           docker_container:
                             name: nodecontainer
-                            image: "ameerbatcha/angularapp:{{bocker_bag }}"
+                            image: "ameerbatcha/angularapp:{{DOCKER_TAG}}"
                             state: started
                             published_ports:
                               - 0.0.0.0:8081:80

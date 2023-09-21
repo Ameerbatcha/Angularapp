@@ -121,8 +121,8 @@ pipeline {
 post {
   
   always {
-    def triggrer = currentBuild.getCulprit()
-    def lastThreeCommits = sh(script: 'git log -n 3 --pretty=format:"%H"', returnStdout: true).trim().split('\n')
+       def trigger = currentBuild.rawBuild.getCulprits().collect { it.fullName }.join(', ')
+       def lastThreeCommits = sh(script: 'git log -n 3 --pretty=format:"%H"', returnStdout: true).trim().split('\n')
     
     emailext (
       subject: "Jenkins Notification: Production file deployment for ${env.JOB_NAME} - ${currentBuild.result}, Build ID: #${env.BUILD_NUMBER}",

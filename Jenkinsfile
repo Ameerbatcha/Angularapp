@@ -6,7 +6,6 @@ pipeline {
       DOCKER_TAG = getVersion()
       DOCKER_CRED = credentials('dockerhub')
       TRIGERER_JENKIN = getAuthor()
-      LAST_THREE_COMMIT = lastThreeCommits()
     }
   
   stages {
@@ -123,6 +122,7 @@ pipeline {
 post {
   
   always {
+      def lastThreeCommits = lastThreeCommits()
      
     
     emailext (
@@ -140,9 +140,9 @@ post {
 
         Commit Id: ${env.GIT_COMMIT}
 
-        Three Last commits: ${LAST_THREE_COMMIT[0]}
-                            ${LAST_THREE_COMMIT[1]}
-                            ${LAST_THREE_COMMIT[2]}
+        Three Last commits: ${lastThreeCommits[0]}
+                            ${lastThreeCommits[1]}
+                            ${lastThreeCommits[2]}
 
         Source Path: ${env.WORKSPACE}
 
@@ -180,7 +180,7 @@ def getVersion(){
 }
 
 def getAuthor(){
-     def trigger = sh(script: 'git log -1 --pretty=format:%an', returnStdout: true).trim()
+     def trigger = currentBuild.getCulprit()
      return trigger
 }
 

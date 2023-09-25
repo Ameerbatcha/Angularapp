@@ -1,3 +1,4 @@
+
 pipeline {
   
   agent any
@@ -5,7 +6,7 @@ pipeline {
    environment {
       DOCKER_TAG = getVersion()
       DOCKER_CRED = credentials('dockerhub')
-  
+      COMMIT_CHANGES = getCommitChanges()
     }
 
   
@@ -62,7 +63,8 @@ pipeline {
     }
 }
 
-      stage('Docker Deploy') {
+      stage('Deploy UAT-Server') {
+
             steps {
               script {
               
@@ -85,7 +87,7 @@ pipeline {
 
                         - name: Start the container
                           docker_container:
-                            name: nodecontainer
+                            name: angularcontainer
                             image: "ameerbatcha/angularapp:{{DOCKER_TAG}}"
                             state: started
                             published_ports:
@@ -118,20 +120,15 @@ pipeline {
               
             }
             }
-        }
 
-    }
-
-
-
-post {
+        post {
   
   always {
 
       script {
 node{
 
-      try {
+    
 
     emailext (
       subject: "Jenkins Notification: Production file deployment for ${env.JOB_NAME} - ${currentBuild.result}, Build ID: #${env.BUILD_NUMBER}",
@@ -161,28 +158,119 @@ node{
         """,
       
       to: "ameerbatcha.learnings@gmail.com",
-     
-      mimeType: 'text/html'
+      mimeType: 'text/html',
+      attachmentsPattern: 'log.txt',
+      attachments: "${COMMIT_CHANGES}"
+  
     )
-      }
-  catch (Exception e) {
-                    emailext (
-                        subject: "Jenkins Notification: Pipeline Failure",
-                        body: "The pipeline failed to execute due to a syntax error.",
-                        to: "ameerbatcha.learnings@gmail.com"
-                    )
-                    throw e
-                }
+      
 
     }
    }  
+  }
  }
+ 
+ 
 }
 
 
 
-      
-  
+stage('Deploy production-Server') {
+              steps {
+                   script {
+                  
+/* input {
+  message "Do you want to deploy the production server?"
+  parameters {
+    choice(name: 'deploy', choices: ['Yes', 'No'], defaultValue: 'No', description: 'Deploy production server?')
+  }
+} */
+
+/*   timeout(time: 1, unit: 'MINUTES') {
+                    input message: 'Waiting for Manager Approval', submitter: 'ameeruwais2001@gmail.com'
+                } */
+                
+       
+            def approval = input(
+            id: 'production-approval',
+            message: 'Do you want to deploy the production server?',
+            submitter: 'ameerbatcha.learnings@gmail.com',
+            parameters: [
+              choice(
+                name: 'deploy',
+                choices: ['Yes', 'No'],
+                defaultValue: 'No',
+                description: 'Deploy production server?'
+              )
+            ]
+          )      
+        
+           if (approval == 'Yes') {
+          
+         
+                    
+                    def ansiblePlaybookContent = '''
+                    - hosts: dockeradmin
+                      become: True
+                    
+
+
+                      tasks:
+                        - name: Install python pip
+                          yum:
+                            name: python-pip
+                            state: present
+
+                        - name: Install docker-py python module
+                          pip:
+                            name: docker-py
+                            state: present
+
+                        - name: Start the container
+                          docker_container:
+                            name: angularcontainer2
+                            image: "ameerbatcha/angularapp:{{DOCKER_TAG}}"
+                            state: started
+                            published_ports:
+                              - 0.0.0.0:8082:80
+                    '''
+                  writeFile(file: 'inline_playbook.yml', text: ansiblePlaybookContent)
+                 
+
+                   def ansibleInventoryContent = '''[dockeradmin]
+                     172.31.3.63 ansible_user=ec2-user
+                    '''
+
+                    writeFile(file: 'dev.inv', text: ansibleInventoryContent)
+
+   
+                 
+
+                  ansiblePlaybook(
+                                 inventory: 'dev.inv',
+                                 playbook: 'inline_playbook.yml',
+                                 credentialsId: 'dev-dockerhost',
+                                 extras: "-e DOCKER_TAG=${DOCKER_TAG}",
+                                 installation: 'ansible',
+                                 disableHostKeyChecking: true,
+                               
+                              
+)
+           } else {
+            error('Production deployment was not approved.')
+          }   
+            
+       }
+      }
+    }
+
+
+
+    
+
+
+
+    } 
 }
 
 
@@ -192,7 +280,10 @@ def getVersion(){
 }
 
 
-
+def getCommitChanges() {
+  def commitChanges = sh(script: 'git diff --name-status HEAD~1..HEAD', returnStdout: true).trim()
+  return commitChanges
+}
     
    
 

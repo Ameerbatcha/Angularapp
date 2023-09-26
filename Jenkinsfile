@@ -7,7 +7,6 @@ pipeline {
       DOCKER_TAG = getVersion()
       DOCKER_CRED = credentials('dockerhub')
       LATEST_COMMITTER_EMAIL = latestCommitterEmail()
-      LATEST_CODE_CHANGES = latestCommitChanges()
     }
 
   
@@ -127,18 +126,26 @@ pipeline {
   always {
 
       script {
-node{
 
+
+
+   def currentCommit = sh(returnStdout: true, script: 'git rev-parse HEAD')
+   def gitDiffOutput = sh(script: "git diff HEAD~1 ${currentCommit}", returnStdout: true)
+   def changes =  sh(script: 'git show --name-status HEAD^', returnStdout: true).trim()
+   
+   def finallog = changes + "\n\n" + gitDiffOutput
+   
+    writeFile file: "latest_code_changes.txt", text: finallog
     
-
+    
     emailext (
-      subject: "Jenkins Notification: Production file deployment for ${env.JOB_NAME} - ${currentBuild.result}, Build ID: #${env.BUILD_NUMBER}",
+      subject: "Jenkins Notification: UAT  deployment for ${env.JOB_NAME} - ${currentBuild.result}, Build ID: #${env.BUILD_NUMBER}",
       
       body: """
        
         Hi DevOps Team, <br><br><br>
 
-        Production File Deployment Process for  <b> ${env.JOB_NAME} ${env.BUILD_NUMBER} is ${currentBuild.result}. </b> Kindly check the logs below for more details.<br><br>
+        File Deployment in UAT server for <b> ${env.JOB_NAME} ${env.BUILD_NUMBER} is ${currentBuild.result}. </b> Kindly check the logs below for more details.<br><br>
 
         Please find the last commit details below:<br><br>
 
@@ -146,12 +153,15 @@ node{
         
         Docker tag/Git commit ID short:<b> ${env.DOCKER_TAG} </b> <br><br>
 
-        Git Commit Id full: <b> ${env.GIT_COMMIT} </b><br><br>
+        Git Commit Id full: <b>${currentCommit}</b><br><br>   
+        
+        Latest Committer Email: <b> ${LATEST_COMMITTER_EMAIL} </b><br><br>
 
         Source Path: <b> ${env.WORKSPACE} </b><br><br>
 
-        Production Deployment - <b>${currentBuild.result} </b> <br><br>
-
+        UAT-server Deployment - <b>${currentBuild.result} </b> <br><br>
+ 
+        <b>Please Approve for Deployment in Production Server </b><br><br>
 
         With Regards, <br><br><br>
 
@@ -160,15 +170,15 @@ node{
       
       to: "ameerbatcha.learnings@gmail.com",
       mimeType: 'text/html',
-      attachmentsPattern: 'log.txt',
-      attachments: "${COMMIT_CHANGES}"
+      attachmentsPattern: "latest_code_changes.txt"
+     
   
     )
       
 
     }
    }  
-  }
+ 
  }
  
  
@@ -180,22 +190,10 @@ stage('Deploy production-Server') {
               steps {
                    script {
                   
-/* input {
-  message "Do you want to deploy the production server?"
-  parameters {
-    choice(name: 'deploy', choices: ['Yes', 'No'], defaultValue: 'No', description: 'Deploy production server?')
-  }
-} */
 
-/*   timeout(time: 1, unit: 'MINUTES') {
-                    input message: 'Waiting for Manager Approval', submitter: 'ameeruwais2001@gmail.com'
-                } */
-                
-       
             def approval = input(
             id: 'production-approval',
             message: 'Do you want to deploy the production server?',
-            submitter: 'ameerbatcha.learnings@gmail.com',
             parameters: [
               choice(
                 name: 'deploy',
@@ -263,7 +261,66 @@ stage('Deploy production-Server') {
             
        }
       }
-    }
+      
+        post {
+  
+  always {
+
+      script {
+
+
+
+   def currentCommit = sh(returnStdout: true, script: 'git rev-parse HEAD')
+   def gitDiffOutput = sh(script: "git diff HEAD~1 ${currentCommit}", returnStdout: true)
+   def changes =  sh(script: 'git show --name-status HEAD^', returnStdout: true).trim()
+   
+   def finallog = changes + "\n\n" + gitDiffOutput
+   
+    writeFile file: "latest_code_changes.txt", text: finallog
+    
+    
+    emailext (
+      subject: "Jenkins Notification: Production deployment for ${env.JOB_NAME} - ${currentBuild.result}, Build ID: #${env.BUILD_NUMBER}",
+      
+      body: """
+       
+        Hi DevOps Team, <br><br><br>
+
+        File Deployment in Production server for <b> ${env.JOB_NAME} ${env.BUILD_NUMBER} is ${currentBuild.result}. </b> Kindly check the logs below for more details.<br><br>
+
+        Please find the last commit details below:<br><br>
+
+        See attached diff of <b> ${env.JOB_NAME} #${env.BUILD_NUMBER}. </b> <br><br>
+        
+        Docker tag/Git commit ID short:<b> ${env.DOCKER_TAG} </b> <br><br>
+
+        Git Commit Id full: <b>${currentCommit}</b><br><br>   
+        
+        Latest Committer Email: <b> ${LATEST_COMMITTER_EMAIL} </b><br><br>
+
+        Source Path: <b> ${env.WORKSPACE} </b><br><br>
+
+        Production Deployment - <b>${currentBuild.result} </b> <br><br>
+ 
+       
+
+        With Regards, <br><br><br>
+
+        Jenkins Admin
+        """,
+      
+      to: "ameerbatcha.learnings@gmail.com",
+      mimeType: 'text/html',
+      attachmentsPattern: "latest_code_changes.txt"
+     
+  
+    )
+      
+
+        }
+       }  
+      }
+ }
 
 
 
@@ -281,16 +338,13 @@ def getVersion(){
 }
 
 
-
   def latestCommitterEmail(){
     def author = sh label:'', returnStdout: true , script: "git log -1 --pretty=format:%ae"
     return author
   } 
 
-def latestCommitChanges(){
-  def changes =  sh(script: 'git show --name-status HEAD^', returnStdout: true).trim()
-  return changes
-}  
+
+    
    
 
     

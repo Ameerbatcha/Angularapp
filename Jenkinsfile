@@ -134,7 +134,8 @@ pipeline {
    def changes =  sh(script: 'git show --name-status HEAD^', returnStdout: true).trim()
    
    def finallog = changes + "\n\n" + gitDiffOutput
-   
+   def latestCommitDate = sh(script: 'git log -1 --format=%cd --date=format:"%Y-%m-%d %H:%M:%S"', returnStdout: true).trim()
+
     writeFile file: "latest_code_changes.txt", text: finallog
     
     
@@ -149,7 +150,7 @@ pipeline {
 
         Please find the last commit details below:<br><br>
 
-        See attached diff of <b> ${env.JOB_NAME} #${env.BUILD_NUMBER}. </b> <br><br>
+        Project/Pipeline: <b> ${env.JOB_NAME} #${env.BUILD_NUMBER}. </b> <br><br>
         
         Docker tag/Git commit ID short:<b> ${env.DOCKER_TAG} </b> <br><br>
 
@@ -160,6 +161,8 @@ pipeline {
         Source Path: <b> ${env.WORKSPACE} </b><br><br>
 
         UAT-server Deployment - <b>${currentBuild.result} </b> <br><br>
+        
+        Latest Commited Date - <b>${latestCommitDate} </b> <br><br>
  
         <b>Please Approve for Deployment in Production Server </b><br><br>
 

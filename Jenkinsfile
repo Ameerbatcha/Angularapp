@@ -6,7 +6,8 @@ pipeline {
    environment {
       DOCKER_TAG = getVersion()
       DOCKER_CRED = credentials('dockerhub')
-      COMMIT_CHANGES = getCommitChanges()
+      LATEST_COMMITTER_EMAIL = latestCommitterEmail()
+      LATEST_CODE_CHANGES = latestCommitChanges()
     }
 
   
@@ -280,11 +281,16 @@ def getVersion(){
 }
 
 
-def getCommitChanges() {
-  def commitChanges = sh(script: 'git diff --name-status HEAD~1..HEAD', returnStdout: true).trim()
-  return commitChanges
-}
-    
+
+  def latestCommitterEmail(){
+    def author = sh label:'', returnStdout: true , script: "git log -1 --pretty=format:%ae"
+    return author
+  } 
+
+def latestCommitChanges(){
+  def changes =  sh(script: 'git show --name-status HEAD^', returnStdout: true).trim()
+  return changes
+}  
    
 
     

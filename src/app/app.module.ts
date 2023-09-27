@@ -1,13 +1,13 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+imported { NgModule } from '@angular/core';
+imported { BrowserModule } from '@angular/platform-browser';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
+imported { AppRoutingModule } from './app-routing.module';
+imported { AppComponent } from './app.component';
+imported { HomeComponent } from './home/home.component';
 import { AllCourseComponent } from './all-course/all-course.component';
 import { PagesComponent } from './pages/pages.component';
 import { BlogComponent } from './blog/blog.component';
-import { ContactComponent } from './contact/contact.component';
+imported { ContactComponent } from './contact/contact.component';
 import { MenuComponent } from './shared/menu/menu.component';
 import { AuthLinksComponent } from './shared/auth-links/auth-links.component';
 import { SocialLinksComponent } from './shared/social-links/social-links.component';

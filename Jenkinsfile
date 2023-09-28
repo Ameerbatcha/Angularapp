@@ -193,7 +193,7 @@ stage('Deploy production-Server') {
               steps {
                    script {
                   
-
+// checking updates
             def approval = input(
             id: 'production-approval',
             message: 'Do you want to deploy the production server?',

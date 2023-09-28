@@ -134,6 +134,10 @@ pipeline {
    def currentcommitdetails =  sh(script: 'git show --name-status ${currentCommit}', returnStdout: true).trim()
 //   def currentcommitdetails =  sh(script: 'git show --name-status HEAD^', returnStdout: true).trim()
    
+    def previousCommitDetails = sh(script: 'git show --name-status HEAD^', returnStdout: true).trim()
+    def previousCommitCodeChange = sh(script: "git diff HEAD~2 HEAD~1", returnStdout: true)
+    
+   
    
    def previousCommit = sh(returnStdout: true,script: 'git log -2 --format="%H,%cd,%ae" --date=format:"%Y-%m-%d %H:%M:%S" | sed -n 2p').trim()
    def previousCommitArray = previousCommit.split(",")
@@ -142,7 +146,7 @@ pipeline {
    def previousCommitAuthor = previousCommitArray[2].trim()
    
    
-   def finallog = currentcommitdetails + "\n\n" + currentCommitcodeChange
+   def finallog = currentcommitdetails + "\n\n" + currentCommitcodeChange + "\n\n" + previousCommitDetails + "\n\n" + previousCommitCodeChange
    def latestCommitDate = sh(script: 'git log -1 --format=%cd --date=format:"%Y-%m-%d %H:%M:%S"', returnStdout: true).trim()
 
     writeFile file: "latest_code_changes.txt", text: finallog
@@ -170,7 +174,7 @@ pipeline {
         Latest Commited Date - <b>${latestCommitDate} </b> <br><br>
  
         
-        Previous Git Commit Id full: <b>${previousCommitId}</b> |  Latest Committer Email: <b>${previousCommitAuthor}</b> |  Latest Commited Date - <b>${previousCommitDate} </b>
+        Previous Git Commit Id full: <b>${previousCommitId}</b> <br>  Previous Committer Email: <b>${previousCommitAuthor}</b> <br>  Previous Commited Date - <b>${previousCommitDate} </b><br><br>
 
         Source Path: <b> ${env.WORKSPACE} </b><br><br>
 
